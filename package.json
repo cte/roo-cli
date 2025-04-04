@@ -1,0 +1,21 @@
+{
+  "name": "roo-cli",
+  "version": "1.0.0",
+  "type": "module",
+  "scripts": {
+    "dev": "tsx src/index.ts"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "packageManager": "pnpm@10.7.1",
+  "dependencies": {
+    "node-ipc": "^12.0.0",
+    "p-wait-for": "^5.0.2"
+  },
+  "devDependencies": {
+    "@types/node": "^22.14.0",
+    "@types/node-ipc": "^9.2.3",
+    "tsx": "^4.19.3"
+  }
+}
