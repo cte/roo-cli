@@ -5,9 +5,8 @@
   "scripts": {
     "dev": "tsx src/index.ts"
   },
-  "keywords": [],
-  "author": "",
-  "license": "ISC",
+  "author": "Chris Estreich",
+  "license": "MIT",
   "packageManager": "pnpm@10.7.1",
   "dependencies": {
     "node-ipc": "^12.0.0",
