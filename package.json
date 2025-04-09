@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "type": "module",
   "scripts": {
-    "dev": "tsx src/index.ts"
+    "dev": "dotenvx run -f .env -- tsx src/index.ts"
   },
   "author": "Chris Estreich",
   "license": "MIT",
@@ -13,6 +13,7 @@
     "p-wait-for": "^5.0.2"
   },
   "devDependencies": {
+    "@dotenvx/dotenvx": "^1.39.1",
     "@types/node": "^22.14.0",
     "@types/node-ipc": "^9.2.3",
     "tsx": "^4.19.3"
