@@ -2,12 +2,35 @@ import pWaitFor from "p-wait-for";
 import ipc from "node-ipc";
 
 import {
+  RooCodeSettings,
   IpcOrigin,
   IpcMessageType,
-  TaskCommandName,
   TaskEvent,
-} from "./types.js";
+} from "@roo-code/types";
+
 import { RooCodeClient } from "./client.js";
+
+const configuration: RooCodeSettings = {
+  apiProvider: "openrouter",
+  openRouterApiKey: process.env.OPENROUTER_API_KEY!,
+  openRouterModelId: "google/gemini-2.0-flash-001",
+
+  autoApprovalEnabled: true,
+  alwaysAllowReadOnly: true,
+  alwaysAllowWrite: true,
+  alwaysAllowBrowser: true,
+  alwaysApproveResubmit: true,
+  alwaysAllowMcp: true,
+  alwaysAllowModeSwitch: true,
+  alwaysAllowSubtasks: true,
+  alwaysAllowExecute: true,
+  allowedCommands: ["*"],
+
+  browserToolEnabled: false,
+  enableCheckpoints: false,
+
+  mode: "code",
+};
 
 const startTask = async (message = "Tell me a joke about pirates.") => {
   const client = new RooCodeClient("/tmp/roo-code.sock");
@@ -34,80 +57,8 @@ const startTask = async (message = "Tell me a joke about pirates.") => {
     origin: IpcOrigin.Client,
     clientId,
     data: {
-      commandName: TaskCommandName.StartNewTask,
-      data: {
-        configuration: {
-          apiProvider: "openrouter",
-          openRouterApiKey: process.env.OPENROUTER_API_KEY!,
-          openRouterModelId: "google/gemini-2.0-flash-001",
-          openRouterModelInfo: {
-            maxTokens: 8192,
-            contextWindow: 1000000,
-            supportsImages: true,
-            supportsPromptCache: false,
-            inputPrice: 0.1,
-            outputPrice: 0.4,
-            thinking: false,
-          },
-
-          pinnedApiConfigs: {},
-          lastShownAnnouncementId: "mar-20-2025-3-10",
-
-          autoApprovalEnabled: true,
-          alwaysAllowReadOnly: true,
-          alwaysAllowReadOnlyOutsideWorkspace: false,
-          alwaysAllowWrite: true,
-          alwaysAllowWriteOutsideWorkspace: false,
-          writeDelayMs: 200,
-          alwaysAllowBrowser: true,
-          alwaysApproveResubmit: true,
-          requestDelaySeconds: 5,
-          alwaysAllowMcp: true,
-          alwaysAllowModeSwitch: true,
-          alwaysAllowSubtasks: true,
-          alwaysAllowExecute: true,
-          allowedCommands: ["*"],
-
-          browserToolEnabled: false,
-          browserViewportSize: "900x600",
-          screenshotQuality: 38,
-          remoteBrowserEnabled: true,
-
-          enableCheckpoints: false,
-          checkpointStorage: "task",
-
-          ttsEnabled: false,
-          ttsSpeed: 1,
-          soundEnabled: false,
-          soundVolume: 0.5,
-
-          maxOpenTabsContext: 20,
-          maxWorkspaceFiles: 200,
-          showRooIgnoredFiles: true,
-          maxReadFileLine: 500,
-
-          terminalOutputLineLimit: 500,
-          terminalShellIntegrationTimeout: 15000,
-
-          diffEnabled: true,
-          fuzzyMatchThreshold: 1.0,
-
-          experiments: {
-            search_and_replace: true,
-            insert_content: false,
-            powerSteering: false,
-          },
-
-          language: "en",
-
-          telemetrySetting: "enabled",
-
-          mcpEnabled: false,
-          mode: "code",
-          customModes: [],
-        },
-        text: message,
-      },
+      commandName: "StartNewTask",
+      data: { configuration, text: message },
     },
   });
 
@@ -125,7 +76,7 @@ const startTask = async (message = "Tell me a joke about pirates.") => {
 
   client.on(IpcMessageType.TaskEvent, ({ eventName, payload }: TaskEvent) => {
     if (
-      (eventName === "message" || eventName === "attempt_completion") &&
+      eventName === "message" &&
       payload[0].taskId === taskId &&
       payload[0].message.partial === false
     ) {

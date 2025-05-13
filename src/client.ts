@@ -5,11 +5,24 @@ import ipc from "node-ipc";
 
 import {
   IpcOrigin,
-  IpcClientEvents,
   IpcMessage,
   IpcMessageType,
-  IpcMessageTaskCommand,
-} from "./types.js";
+  TaskEvent,
+} from "@roo-code/types";
+
+// TODO: Add to `@roo-code/types`.
+type Ack = {
+  clientId: string;
+  pid: number;
+  ppid: number;
+};
+
+type IpcClientEvents = {
+  [IpcMessageType.Connect]: [];
+  [IpcMessageType.Disconnect]: [];
+  [IpcMessageType.Ack]: [data: Ack];
+  [IpcMessageType.TaskEvent]: [data: TaskEvent];
+};
 
 export class RooCodeClient extends EventEmitter<IpcClientEvents> {
   private readonly _socketPath: string;
@@ -94,7 +107,7 @@ export class RooCodeClient extends EventEmitter<IpcClientEvents> {
     }
   }
 
-  public sendMessage(message: IpcMessageTaskCommand) {
+  public sendMessage(message: IpcMessage) {
     if (!this.isConnected || !ipc.of[this._id]) {
       return;
     }

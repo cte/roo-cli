@@ -13,9 +13,10 @@
     "p-wait-for": "^5.0.2"
   },
   "devDependencies": {
-    "@dotenvx/dotenvx": "^1.39.1",
-    "@types/node": "^22.14.0",
+    "@dotenvx/dotenvx": "^1.44.0",
+    "@roo-code/types": "^1.7.0",
+    "@types/node": "^22.15.17",
     "@types/node-ipc": "^9.2.3",
-    "tsx": "^4.19.3"
+    "tsx": "^4.19.4"
   }
 }
